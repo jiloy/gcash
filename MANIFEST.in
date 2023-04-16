@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include gcash *.css
+recursive-include gcash *.csv
+recursive-include gcash *.html
+recursive-include gcash *.ico
+recursive-include gcash *.js
+recursive-include gcash *.json
+recursive-include gcash *.md
+recursive-include gcash *.png
+recursive-include gcash *.py
+recursive-include gcash *.svg
+recursive-include gcash *.txt
+recursive-exclude gcash *.pyc
