@@ -114,21 +114,9 @@ app_license = "MIT"
 # ---------------
 
 # scheduler_events = {
-#	"all": [
-#		"gcash.tasks.all"
-#	],
-#	"daily": [
-#		"gcash.tasks.daily"
-#	],
-#	"hourly": [
-#		"gcash.tasks.hourly"
-#	],
-#	"weekly": [
-#		"gcash.tasks.weekly"
-#	],
-#	"monthly": [
-#		"gcash.tasks.monthly"
-#	],
+# 	"daily": [
+# 		"gcash.utils.update_unpaid_transactions"
+# 	]
 # }
 
 # Testing

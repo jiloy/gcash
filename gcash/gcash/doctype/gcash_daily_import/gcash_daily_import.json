@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:posting_date",
+ "creation": "2023-12-12 22:50:01.533123",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "details",
+  "number_of_transactions",
+  "gcash",
+  "cash",
+  "import"
+ ],
+ "fields": [
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Posting Date",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "description": "Borrow-Lender-Cash or Gcash <br>\nCashin-Amount <br>\nCashin-Amount-Unpaid <br>\n",
+   "fieldname": "details",
+   "fieldtype": "Long Text",
+   "label": "Details"
+  },
+  {
+   "fieldname": "import",
+   "fieldtype": "Button",
+   "label": "Import",
+   "options": "import_transactions"
+  },
+  {
+   "fieldname": "number_of_transactions",
+   "fieldtype": "Float",
+   "label": "Number of Transactions",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "gcash",
+   "fieldtype": "Currency",
+   "label": "Gcash"
+  },
+  {
+   "default": "0",
+   "fieldname": "cash",
+   "fieldtype": "Currency",
+   "label": "Cash"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-01 12:13:21.630564",
+ "modified_by": "Administrator",
+ "module": "Gcash",
+ "name": "Gcash Daily Import",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

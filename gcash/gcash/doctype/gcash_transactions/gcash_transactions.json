@@ -1,0 +1,260 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-04-16 15:45:19.823983",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "status",
+  "cash_or_gcash",
+  "method",
+  "lender",
+  "amount",
+  "profit",
+  "partial_payment",
+  "balance",
+  "additional_profit",
+  "column_break_8",
+  "reference_number",
+  "time_received",
+  "date",
+  "time",
+  "no_charge",
+  "profit_is_in_gcash",
+  "deduct_fee_from_amount",
+  "edit_profit",
+  "gcash_to_bank",
+  "no_per_day",
+  "more_information_section",
+  "remarks",
+  "amended_from",
+  "references_section",
+  "journal_entries"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "G-"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "SETTLED",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "\nSETTLED\nUNPAID\nUNCLAIMED\nBORROW\nRETURN\nWITHDRAW\nPROFIT EXPENSE\nPROFIT\nDEPOSIT"
+  },
+  {
+   "depends_on": "eval: !doc.capital && !['BORROW','RETURN'].includes(doc.status)",
+   "fieldname": "method",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Method",
+   "options": "\nCash In\nCash Out"
+  },
+  {
+   "default": "0",
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "deduct_fee_from_amount",
+   "fieldtype": "Check",
+   "label": "Deduct Fee from Amount"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "depends_on": "eval: !['BORROW','RETURN'].includes(doc.status) ",
+   "fieldname": "profit",
+   "fieldtype": "Currency",
+   "label": "Profit",
+   "read_only_depends_on": "eval: !doc.edit_profit"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Gcash Transactions",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "depends_on": "eval: !['BORROW','RETURN'].includes(doc.status) && !doc.capital",
+   "fieldname": "no_charge",
+   "fieldtype": "Check",
+   "label": "No Charge"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "depends_on": "eval: !['BORROW','RETURN'].includes(doc.status)",
+   "fieldname": "edit_profit",
+   "fieldtype": "Check",
+   "label": "Edit Profit"
+  },
+  {
+   "fieldname": "more_information_section",
+   "fieldtype": "Section Break",
+   "label": "More Information"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Remarks",
+   "mandatory_depends_on": "eval: doc.status == 'UNPAID'"
+  },
+  {
+   "depends_on": "eval: ['BORROW','RETURN',\"PROFIT\",\"PROFIT EXPENSE\"].includes(doc.status) || doc.capital",
+   "fieldname": "cash_or_gcash",
+   "fieldtype": "Select",
+   "label": "Cash or Gcash",
+   "options": "\nGcash\nCash"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "profit_is_in_gcash",
+   "fieldtype": "Check",
+   "label": "Profit is in Gcash"
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval: ['BORROW',\"RETURN\"].includes(doc.status)",
+   "fieldname": "lender",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Lender",
+   "options": "Lender"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "depends_on": "eval: !doc.capital && doc.status == 'UNPAID'",
+   "fieldname": "partial_payment",
+   "fieldtype": "Currency",
+   "label": "Partial Payment"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "additional_profit",
+   "fieldtype": "Currency",
+   "label": "Additional Profit"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "depends_on": "eval: !doc.capital && status == 'UNPAID'",
+   "fieldname": "balance",
+   "fieldtype": "Currency",
+   "label": "Balance"
+  },
+  {
+   "fieldname": "references_section",
+   "fieldtype": "Section Break",
+   "label": "References"
+  },
+  {
+   "default": "0",
+   "fieldname": "gcash_to_bank",
+   "fieldtype": "Check",
+   "label": "Gcash to Bank"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "journal_entries",
+   "fieldtype": "Table",
+   "label": "Journal Entries",
+   "options": "Gcash Journal Entries",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "Now",
+   "depends_on": "eval: doc.status=='UNPAID'",
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "label": "Time",
+   "mandatory_depends_on": "eval: doc.status=='UNPAID'"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "no_per_day",
+   "fieldtype": "Check",
+   "label": "No Per Day"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "reference_number",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Reference Number"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "time_received",
+   "fieldtype": "Time",
+   "label": "Time Received"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-03-20 21:33:38.121484",
+ "modified_by": "Administrator",
+ "module": "Gcash",
+ "name": "Gcash Transactions",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
