@@ -12,211 +12,211 @@ class GcashTransactions(Document):
 			if jv.docstatus == 1:
 				jv.cancel()
 				frappe.db.commit()
-	#
-	@frappe.whitelist()def on_submit(self):
-	# 	gcash_account  = "Gcash Wallet - C"
-	# 	cash_account  = "Gcash Cash - C"
-	# 	profit_account  = "Gcash Profit - C"
-	# 	temporary_account  = "Temporary Opening - C"
-	# 	borrow_account  = "Gcash Borrow - C"
-	# 	accounts = []
-	# 	if self.status == 'SETTLED':
-	# 		accounts =  [
-	# 			{
-	# 				"account": cash_account if self.method == 'Cash In' else gcash_account,
-	# 				"debit": self.amount if self.method == 'Cash Out' and not self.profit_is_in_gcash else
-	# 							self.amount + self.profit if self.method == 'Cash Out' and self.profit_is_in_gcash else self.amount,
-	# 				"debit_in_account_currency": self.amount if self.method == 'Cash Out' and not self.profit_is_in_gcash else
-	# 							self.amount + self.profit if self.method == 'Cash Out' and self.profit_is_in_gcash else self.amount,
-	# 			},
-	# 			{
-	# 				"account": gcash_account if self.method == 'Cash In' else cash_account,
-	# 				"credit": self.amount if self.method == 'Cash Out' and not self.deduct_fee_from_amount else self.amount - self.profit if self.method == 'Cash Out' and self.deduct_fee_from_amount else self.amount,
-	# 				"credit_in_account_currency": self.amount if self.method == 'Cash Out' and not self.deduct_fee_from_amount else self.amount - self.profit if self.method == 'Cash Out' and self.deduct_fee_from_amount else self.amount,
-	# 			}
-	# 		]
-	# 		if not self.profit_is_in_gcash and not self.deduct_fee_from_amount and self.profit > 0:
-	# 			accounts.append({
-	# 				"account": cash_account,
-	# 				"debit": self.profit,
-	# 				"debit_in_account_currency": self.profit,
-	# 			})
-	# 		if self.gcash_to_bank:
-	# 			accounts += [
-	# 				{
-	# 					"account": cash_account,
-	# 					"debit": 15,
-	# 					"debit_in_account_currency": 15
-	# 				},
-	# 				{
-	# 					"account": gcash_account,
-	# 					"credit": 15,
-	# 					"credit_in_account_currency":15,
-	# 				}
-	# 			]
-	# 		if self.profit > 0:
-	# 			accounts += [
-	# 				{
-	# 					"account": profit_account,
-	# 					"debit": self.profit,
-	# 					"debit_in_account_currency": self.profit
-	# 				},
-	# 				{
-	# 					"account": temporary_account,
-	# 					"credit": self.profit * 2,
-	# 					"credit_in_account_currency": self.profit * 2,
-	# 				}
-	# 			]
-	# 	elif self.status == 'UNPAID':
-	# 		accounts = [
-	# 			{
-	# 				"account": gcash_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 			}
-	# 		]
-	# 	elif self.status == 'BORROW':
-	# 		accounts = [
-	# 			{
-	# 				"account": borrow_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 				"party_type": "Lender",
-	# 				"party": self.lender,
-	# 			},
-	# 			{
-	# 				"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"credit": self.amount * 2,
-	# 				"credit_in_account_currency": self.amount * 2,
-	# 			}
-	# 		]
-	# 	elif self.status == 'RETURN':
-	# 		accounts = [
-	# 			{
-	# 				"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": borrow_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 				"party_type": "Lender",
-	# 				"party": self.lender,
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"debit": self.amount * 2,
-	# 				"debit_in_account_currency": self.amount * 2,
-	# 			}
-	# 		]
-	# 	elif self.status == 'UNCLAIMED':
-	# 		accounts = [
-	# 			{
-	# 				"account": gcash_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			}
-	# 		]
-	# 	elif self.status == 'WITHDRAW':
-	# 		accounts = [
-	# 			{
-	# 				"account": cash_account ,
-	# 				"debit": self.amount ,
-	# 				"debit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": gcash_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			}
-	# 		]
-	# 	elif self.status == 'PROFIT EXPENSE':
-	# 		accounts = [
-	# 			{
-	# 				"account": profit_account,
-	# 				"credit": self.amount ,
-	# 				"credit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount * 2,
-	# 			}
-	# 		]
-	# 	elif self.status == 'PROFIT':
-	# 		accounts = [
-	# 			{
-	# 				"account": profit_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
-	# 				"credit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": temporary_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount * 2,
-	# 			}
-	# 		]
-	# 	elif self.status == 'DEPOSIT':
-	# 		accounts = [
-	# 			{
-	# 				"account": gcash_account,
-	# 				"debit": self.amount,
-	# 				"debit_in_account_currency": self.amount,
-	# 			},
-	# 			{
-	# 				"account": cash_account,
-	# 				"credit": self.amount,
-	# 				"credit_in_account_currency": self.amount,
-	# 			}
-	# 		]
-	# 	if len(accounts) > 0:
-	# 		obj = {
-	# 			"doctype": "Journal Entry",
-	# 			"voucher_type": "Journal Entry",
-	# 			"posting_date": self.date,
-	# 			"accounts": accounts,
-	# 			"user_remark": self.remarks
-    #
-	# 		}
-	# 		jv = frappe.get_doc(obj).insert()
-	# 		jv.submit()
-	# 		obj = {
-	# 			"doctype": "Gcash Journal Entries",
-    #
-	# 			"journal_entry": jv.name,
-	# 			"remarks": self.status,
-	# 			"parent": self.name,
-	# 			"parenttype": "Gcash Transactions",
-	# 			"parentfield": "journal_entries",
-	# 		}
-	# 		frappe.get_doc(obj).insert()
-	# 		frappe.db.commit()
+	@frappe.whitelist()
+	def on_submit(self):
+		gcash_account  = "Gcash Wallet - C"
+		cash_account  = "Gcash Cash - C"
+		profit_account  = "Gcash Profit - C"
+		temporary_account  = "Temporary Opening - C"
+		borrow_account  = "Gcash Borrow - C"
+		accounts = []
+		if self.status == 'SETTLED':
+			accounts =  [
+				{
+					"account": cash_account if self.method == 'Cash In' else gcash_account,
+					"debit": self.amount if self.method == 'Cash Out' and not self.profit_is_in_gcash else
+								self.amount + self.profit if self.method == 'Cash Out' and self.profit_is_in_gcash else self.amount,
+					"debit_in_account_currency": self.amount if self.method == 'Cash Out' and not self.profit_is_in_gcash else
+								self.amount + self.profit if self.method == 'Cash Out' and self.profit_is_in_gcash else self.amount,
+				},
+				{
+					"account": gcash_account if self.method == 'Cash In' else cash_account,
+					"credit": self.amount if self.method == 'Cash Out' and not self.deduct_fee_from_amount else self.amount - self.profit if self.method == 'Cash Out' and self.deduct_fee_from_amount else self.amount,
+					"credit_in_account_currency": self.amount if self.method == 'Cash Out' and not self.deduct_fee_from_amount else self.amount - self.profit if self.method == 'Cash Out' and self.deduct_fee_from_amount else self.amount,
+				}
+			]
+			if not self.profit_is_in_gcash and not self.deduct_fee_from_amount and self.profit > 0:
+				accounts.append({
+					"account": cash_account,
+					"debit": self.profit,
+					"debit_in_account_currency": self.profit,
+				})
+			if self.gcash_to_bank:
+				accounts += [
+					{
+						"account": cash_account,
+						"debit": 15,
+						"debit_in_account_currency": 15
+					},
+					{
+						"account": gcash_account,
+						"credit": 15,
+						"credit_in_account_currency":15,
+					}
+				]
+			if self.profit > 0:
+				accounts += [
+					{
+						"account": profit_account,
+						"debit": self.profit,
+						"debit_in_account_currency": self.profit
+					},
+					{
+						"account": temporary_account,
+						"credit": self.profit * 2,
+						"credit_in_account_currency": self.profit * 2,
+					}
+				]
+		elif self.status == 'UNPAID':
+			accounts = [
+				{
+					"account": gcash_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				},
+				{
+					"account": temporary_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount,
+				}
+			]
+		elif self.status == 'BORROW':
+			accounts = [
+				{
+					"account": borrow_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount,
+					"party_type": "Lender",
+					"party": self.lender,
+				},
+				{
+					"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount
+				},
+				{
+					"account": temporary_account,
+					"credit": self.amount * 2,
+					"credit_in_account_currency": self.amount * 2,
+				}
+			]
+		elif self.status == 'RETURN':
+			accounts = [
+				{
+					"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				},
+				{
+					"account": borrow_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+					"party_type": "Lender",
+					"party": self.lender,
+				},
+				{
+					"account": temporary_account,
+					"debit": self.amount * 2,
+					"debit_in_account_currency": self.amount * 2,
+				}
+			]
+		elif self.status == 'UNCLAIMED':
+			accounts = [
+				{
+					"account": gcash_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount,
+				},
+				{
+					"account": temporary_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				}
+			]
+		elif self.status == 'WITHDRAW':
+			accounts = [
+				{
+					"account": cash_account ,
+					"debit": self.amount ,
+					"debit_in_account_currency": self.amount,
+				},
+				{
+					"account": gcash_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				}
+			]
+		elif self.status == 'PROFIT EXPENSE':
+			accounts = [
+				{
+					"account": profit_account,
+					"credit": self.amount ,
+					"credit_in_account_currency": self.amount,
+				},
+				{
+					"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				},
+				{
+					"account": temporary_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount * 2,
+				}
+			]
+		elif self.status == 'PROFIT':
+			accounts = [
+				{
+					"account": profit_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount,
+				},
+				{
+					"account": cash_account if self.cash_or_gcash == 'Cash' else gcash_account,
+					"credit": self.amount,
+					"debit_in_account_currency": self.amount,
+				},
+				{
+					"account": temporary_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount * 2,
+				}
+			]
+		elif self.status == 'DEPOSIT':
+			accounts = [
+				{
+					"account": gcash_account,
+					"debit": self.amount,
+					"debit_in_account_currency": self.amount,
+				},
+				{
+					"account": cash_account,
+					"credit": self.amount,
+					"credit_in_account_currency": self.amount,
+				}
+			]
+		if len(accounts) > 0:
+			obj = {
+				"doctype": "Journal Entry",
+				"voucher_type": "Journal Entry",
+				"posting_date": self.date,
+				"accounts": accounts,
+				"user_remark": self.remarks
+
+			}
+			jv = frappe.get_doc(obj).insert()
+			jv.submit()
+			obj = {
+				"doctype": "Gcash Journal Entries",
+
+				"journal_entry": jv.name,
+				"remarks": self.status,
+				"parent": self.name,
+				"parenttype": "Gcash Transactions",
+				"parentfield": "journal_entries",
+			}
+			frappe.get_doc(obj).insert()
+			frappe.db.commit()
 	def paid(self):
 		cash_account = "Gcash Cash - C"
 		profit_account = "Gcash Profit - C"
