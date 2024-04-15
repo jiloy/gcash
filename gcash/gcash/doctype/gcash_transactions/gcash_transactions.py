@@ -7,13 +7,12 @@ from frappe.model.document import Document
 class GcashTransactions(Document):
 	def on_cancel(self):
 		for x in self.journal_entries:
-
 			jv = frappe.get_doc("Journal Entry",x.journal_entry)
 			if jv.docstatus == 1:
 				jv.cancel()
 				frappe.db.commit()
 	@frappe.whitelist()
-	def on_submit(self):
+	def on_submit_doc(self):
 		gcash_account  = "Gcash Wallet - C"
 		cash_account  = "Gcash Cash - C"
 		profit_account  = "Gcash Profit - C"
@@ -217,6 +216,7 @@ class GcashTransactions(Document):
 			}
 			frappe.get_doc(obj).insert()
 			frappe.db.commit()
+
 	def paid(self):
 		cash_account = "Gcash Cash - C"
 		profit_account = "Gcash Profit - C"
@@ -411,6 +411,10 @@ class GcashTransactions(Document):
 
 	def validate(self):
 		self.compute_amounts()
+		self.on_submit_doc()
+
+		frappe.db.sql(""" UPDATE `tabGcash Transactions` SET docstatus=1 WHERE name=%s """, self.name)
+		frappe.db.commit()
 	@frappe.whitelist()
 	def compute_amounts(self):
 		if self.status not in ['BORROW','RETURN', 'PROFIT EXPENSE']:
@@ -438,3 +442,13 @@ class GcashTransactions(Document):
 		# 	else:
 		# 		self.gcash_money_after_transaction = self.gcash_money_before_transaction
 		# 		self.cash_on_hand_after_transaction = self.cash_on_hand_before_transaction - self.amount
+
+@frappe.whitelist(allow_guest=1)
+def compute_amount(status,amount,no_charge,edit_profit,profit):
+	print("HERE")
+	if status not in ['BORROW', 'RETURN', 'PROFIT EXPENSE']:
+		no_charge = (no_charge != '0')
+		edit_profit = (edit_profit != '0')
+		profit = math.ceil(float(amount) * 0.01) if float(amount) >= 500 and not no_charge and not edit_profit else 5 if not no_charge and not edit_profit else profit if edit_profit else 0
+		print(profit)
+		return profit
