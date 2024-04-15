@@ -214,9 +214,9 @@ class GcashTransactions(Document):
 				"parenttype": "Gcash Transactions",
 				"parentfield": "journal_entries",
 			}
-			frappe.get_doc(obj).insert()
+			frappe.get_doc(obj).insert(ignore_permissions=1)
 			frappe.db.commit()
-
+	@frappe.whitelist()
 	def paid(self):
 		cash_account = "Gcash Cash - C"
 		profit_account = "Gcash Profit - C"
@@ -408,13 +408,11 @@ class GcashTransactions(Document):
 			self.gcash_money_before_transaction = 0
 			self.cash_on_hand_before_transaction = 0
 			return False
-
 	def validate(self):
 		self.compute_amounts()
-		self.on_submit_doc()
 
-		frappe.db.sql(""" UPDATE `tabGcash Transactions` SET docstatus=1 WHERE name=%s """, self.name)
-		frappe.db.commit()
+		self.on_submit_doc()
+		self.docstatus = 1
 	@frappe.whitelist()
 	def compute_amounts(self):
 		if self.status not in ['BORROW','RETURN', 'PROFIT EXPENSE']:
