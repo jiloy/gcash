@@ -50,7 +50,7 @@
    "fieldtype": "Select",
    "in_standard_filter": 1,
    "label": "Status",
-   "options": "\nSETTLED\nUNPAID\nUNCLAIMED\nBORROW\nRETURN\nWITHDRAW\nPROFIT EXPENSE\nPROFIT\nDEPOSIT"
+   "options": "\nSETTLED\nUNPAID\nUNCLAIMED\nBORROW\nRETURN\nWITHDRAW\nPROFIT EXPENSE\nPROFIT\nDEPOSIT\nCLAIM"
   },
   {
    "depends_on": "eval: !doc.capital && !['BORROW','RETURN'].includes(doc.status)",
@@ -231,7 +231,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-20 21:33:38.121484",
+ "modified": "2024-04-17 21:20:23.493714",
  "modified_by": "Administrator",
  "module": "Gcash",
  "name": "Gcash Transactions",

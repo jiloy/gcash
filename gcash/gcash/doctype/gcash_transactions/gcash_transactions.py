@@ -216,6 +216,30 @@ class GcashTransactions(Document):
 			}
 			frappe.get_doc(obj).insert(ignore_permissions=1)
 			frappe.db.commit()
+		if self.status == 'CLAIM':
+			gt = frappe.db.sql(""" SELECT * FROM `tabGcash Transactions` WHERE reference_number=%s""",self.reference_number,as_dict=1)
+			if len(gt) > 0:
+				gtr = frappe.get_doc("Gcash Transactions", gt[0].name)
+				if self.deduct_fee_from_amount:
+					gtr.deduct_fee_from_amount = 1
+					gtr.time_received = self.time_received
+					gtr.save()
+					frappe.db.commit()
+				if self.no_charge:
+					gtr.no_charge = 1
+					gtr.profit = 0
+					gtr.edit_profit = 1
+					gtr.time_received = self.time_received
+					gtr.save()
+					frappe.db.commit()
+				# if self.additional_profit > 0:
+				# 	gtr.additional_profit = self.additional_profit
+				# 	gtr.save()
+				gtr1 = frappe.get_doc("Gcash Transactions", gt[0].name)
+
+				gtr1.claimed()
+			frappe.throw("Claimed!")
+
 	@frappe.whitelist()
 	def paid(self):
 		cash_account = "Gcash Cash - C"
@@ -450,3 +474,11 @@ def compute_amount(status,amount,no_charge,edit_profit,profit):
 		profit = math.ceil(float(amount) * 0.01) if float(amount) >= 500 and not no_charge and not edit_profit else 5 if not no_charge and not edit_profit else profit if edit_profit else 0
 		print(profit)
 		return profit
+
+@frappe.whitelist(allow_guest=1)
+def fetch_reference_number(reference_number):
+	print("REFERENCE NUMBER")
+	print(reference_number)
+	gcash_transaction = frappe.db.sql(""" SELECT * FROM `tabGcash Transactions` WHERE reference_number=%s and docstatus=1""",reference_number,as_dict=1)
+	print(gcash_transaction)
+	return gcash_transaction
