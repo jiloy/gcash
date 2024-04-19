@@ -22,7 +22,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2024-04-17 21:47:14.776680",
+ "modified": "2024-04-19 08:45:01.375002",
  "modified_by": "Administrator",
  "module": "Gcash",
  "name": "gcash",
@@ -65,7 +65,7 @@
   },
   {
    "allow_read_on_all_link_options": 0,
-   "depends_on": "eval: (!doc.capital && !['BORROW','RETURN'].includes(doc.status)) && !doc.stauts == 'CLAIM'",
+   "depends_on": "eval: !doc.capital && !['BORROW','RETURN','CLAIM'].includes(doc.status)",
    "fieldname": "method",
    "fieldtype": "Select",
    "hidden": 0,
